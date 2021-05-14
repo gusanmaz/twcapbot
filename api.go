@@ -29,7 +29,7 @@ const botLogPrefix = "Tweet Caption Bot: "
 const DownloadRetries = 5
 
 func init() {
-	capdec.ChangeMaxBrowserDimensions(5500, 3200)
+	//capdec.ChangeMaxBrowserDimensions(5500, 3200)
 }
 
 func New(creds twigger.Credentials, logFile *os.File, codes []string, outDirPath string) *TweetCaptionBot {
