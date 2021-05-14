@@ -8,19 +8,19 @@ import (
 	"path/filepath"
 )
 
-func DownloadTo(url, path string) error{
+func DownloadTo(url, path string) error {
 	dir := filepath.Dir(path)
 	info, err := os.Stat(dir)
-	if err != nil{
+	if err != nil {
 		return err
 	}
-	if !info.IsDir(){
+	if !info.IsDir() {
 		return errors.New(path + " is not a valid directory!")
 	}
 
 	resp, err := http.Get(url)
 	if err != nil {
-		return  err
+		return err
 	}
 	defer resp.Body.Close()
 
