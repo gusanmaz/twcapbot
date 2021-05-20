@@ -22,10 +22,11 @@ const (
 	outPathDefUsage = "Output directory for saving original tweet media and captioned tweet photos"
 
 	shortcut = " (shortcut)"
+	selfReferenceText = "foo(goo())"
 )
 
 const TestBot = true // Set true if bot account and test account is the same one
-const ResponseText = "here is the captioned tweet you've requested!"
+const ResponseText = "Your captioned photos are ready!"
 const BatchInterval = 12 // in seconds
 
 var (
@@ -117,7 +118,7 @@ func ReplyToMention(bot *twcapbot.TweetCaptionBot, tw twigger.Tweet) (int64, err
 	conn := bot.TwiggerConn
 	mentionText := tw.FullText
 	bot.InfoLog.Printf("Preparation of caption tweet for tweet (User: %v ID: %v) has started.", tw.User.ScreenName, tw.Id)
-	if TestBot && (strings.Contains(mentionText, ResponseText) || strings.Contains(mentionText, "abakus!")) {
+	if TestBot && (strings.Contains(mentionText, ResponseText) || strings.Contains(mentionText, selfReferenceText)) {
 		bot.InfoLog.Println("Mention tweet is skipped for captioning because of self-reference")
 		return -1, nil
 	}
