@@ -5,7 +5,7 @@ import (
 	"github.com/gusanmaz/twigger"
 )
 
-const BotName = "Tweet Caption Bot"
+const BotName = "Tweet Captioner Bot"
 
 var infoNoteTempl = "This tweet could be reached from following URL: %v"
 
