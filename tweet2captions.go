@@ -3,11 +3,12 @@ package twcapbot
 import (
 	"fmt"
 	"github.com/gusanmaz/twigger"
+	"strings"
 )
 
 const BotName = "Tweet Captioner Bot"
 
-var infoNoteTempl = "This tweet could be reached from following URL: %v"
+var infoNoteTempl = "URL: %v"
 
 var (
 	botScreenName    string
@@ -66,8 +67,9 @@ func GetCaptionsForTweet(tw twigger.Tweet, quotedTweet *twigger.Tweet) []string 
 		textNote += fmt.Sprintf("Original tweet's content: %v <br/><br/>", tw.FullText)
 		textNote += fmt.Sprintf("Quoted tweet's content: %v", quotedTweet.FullText)
 
-		originalTweetInfoNote := fmt.Sprintf(infoNoteTempl, GetTweetURL(tw))
-		quotedTweetInfoNote := fmt.Sprintf(infoNoteTempl, GetTweetURL(*quotedTweet))
+		url := strings.TrimPrefix(GetTweetURL(tw), "https://www.")
+		originalTweetInfoNote := fmt.Sprintf(infoNoteTempl, url)
+		quotedTweetInfoNote := fmt.Sprintf(infoNoteTempl, url)
 		infoNote = fmt.Sprintf("Original Tweet URL: %v <br/><br/>Quoted tweet URL: %v", originalTweetInfoNote, quotedTweetInfoNote)
 
 		originalTweetHasSpecialMedia := tw.ContainsGIF() || tw.ContainsVideo()

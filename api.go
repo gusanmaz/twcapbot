@@ -64,7 +64,7 @@ func New(creds twigger.Credentials, logFile *os.File, codes []string, outDirPath
 		log.Panicf("Cannot copy hair.png into temporary directory. Error: %v", err)
 	}
 
-	infoW := tConn.ErrLog.Writer()
+	infoW := tConn.InfoLog.Writer()
 	bot.InfoLog = log.New(infoW, botLogPrefix, log.LstdFlags)
 
 	errW := tConn.ErrLog.Writer()
@@ -113,39 +113,39 @@ func (b *TweetCaptionBot) CaptionTweet(id int64, rootPath string) error {
 	for _, v := range fNameInfo {
 		srcPath := filepath.Join(userDirPath, v.LongFileName)
 		destFilePath := filepath.Join(userDirPath, v.LongCaptionFileName)
-		b.InfoLog.Printf("Captioning of tweet with ID of %v has started", tw.Id)
+		b.InfoLog.Printf("Captioning of tweet with IDStr of %v has started", tw.Id)
 		if v.MediaTweet {
 			err := DownloadTo(v.MediaURL, srcPath)
 			if err != nil {
-				b.InfoLog.Printf("Download of media files of tweet with ID %v has failed!", tw.Id)
+				b.InfoLog.Printf("Download of media files of tweet with IDStr %v has failed!", tw.Id)
 				for i := 1; i <= DownloadRetries; i++ {
-					b.InfoLog.Printf("Attempt %v/%v to download media files of tweet (ID: %v)", i+1, DownloadRetries, tw.Id)
+					b.InfoLog.Printf("Attempt %v/%v to download media files of tweet (IDStr: %v)", i+1, DownloadRetries, tw.Id)
 					err = DownloadTo(v.MediaURL, srcPath)
 					if err == nil {
-						b.InfoLog.Printf("Media files for tweet (ID: %v) has succesfully downloaded", tw.Id)
+						b.InfoLog.Printf("Media files for tweet (IDStr: %v) has succesfully downloaded", tw.Id)
 						break
 					}
 				}
 				if err != nil {
-					b.ErrLog.Printf("%v attempts to download media files for tweet with ID of %v has failed!", DownloadRetries)
+					b.ErrLog.Printf("%v attempts to download media files for tweet with IDStr of %v has failed!", DownloadRetries)
 					return err
 				}
 			}
 			err = capdec.Caption(srcPath, GetCaptionsForTweet(tw, quotedTweet), destFilePath, b.JSCodes)
 			if err != nil {
-				b.ErrLog.Printf("Captioning of tweet with ID of %v is unsuccessful!", tw.Id)
+				b.ErrLog.Printf("Captioning of tweet with IDStr of %v is unsuccessful!", tw.Id)
 				b.ErrLog.Printf("Error message: %v", err)
 				panic("Exiting program...")
 			}
 		} else {
 			err := capdec.Caption(b.HairPhotoPath, GetCaptionsForTweet(tw, quotedTweet), destFilePath, b.JSCodes)
 			if err != nil {
-				b.ErrLog.Printf("Captioning of tweet with ID of %v is unsuccessful!", tw.Id)
+				b.ErrLog.Printf("Captioning of tweet with IDStr of %v is unsuccessful!", tw.Id)
 				b.ErrLog.Printf("Error message: %v", err)
 				panic("Exiting program...")
 			}
 		}
-		b.InfoLog.Printf("Captioning of tweet with ID of %v has completed successfully", tw.Id)
+		b.InfoLog.Printf("Captioning of tweet with IDStr of %v has completed successfully", tw.Id)
 	}
 
 	htmlFilePath := filepath.Join(userDirPath, fNameInfo[0].LongHTMLFileName)
@@ -160,7 +160,7 @@ func (b *TweetCaptionBot) CaptionTweet(id int64, rootPath string) error {
 
 	_, err = htmFile.WriteString(text)
 	if err != nil {
-		b.ErrLog.Printf("Couldn't write tweet (ID: %v) url into %v", tw.Id, htmlFilePath)
+		b.ErrLog.Printf("Couldn't write tweet (IDStr: %v) url into %v", tw.Id, htmlFilePath)
 	}
 
 	return nil
