@@ -148,6 +148,12 @@ func GetNewMentions(bot twcapbot.TweetCaptionBot) {
 
 	Tasks.mu.Lock()
 	for _, mention := range mentions {
+		text := mention.FullText
+		text = strings.ToLower(text)
+		if !strings.Contains(text, "caption"){
+			continue
+		}
+
 		if mention.Id > maxID {
 			maxID = mention.Id
 		}
